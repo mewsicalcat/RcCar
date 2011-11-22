@@ -28,7 +28,7 @@ void setup()
     ADB::init();
 
     // Open an ADB stream to the phone's shell. Auto-reconnect
-    connection = ADB::addConnection("tcp:4567", true, adbEventHandler);  
+    connection = ADB::addConnection("tcp:1337", true, adbEventHandler);  //4567
 }
 
 void loop()

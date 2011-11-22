@@ -1,0 +1,12 @@
+enum COMMAND
+  {
+    FORWARD, 
+    BACKWARD, 
+    LEFT, 
+    RIGHT, 
+    FORWARDLEFT, 
+    FORWARDRIGHT, 
+    BACKWARDLEFT, 
+    BACKWARDRIGHT, 
+    STOP 
+  }

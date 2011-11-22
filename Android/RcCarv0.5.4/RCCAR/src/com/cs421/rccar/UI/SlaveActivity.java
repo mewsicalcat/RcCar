@@ -1,6 +1,9 @@
 package com.cs421.rccar.UI;
 
+import java.io.IOException;
 import java.util.Set;
+
+import org.microbridge.server.Server;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -41,6 +44,8 @@ public class SlaveActivity extends Activity
 	private static TextView t;
 	private Command currState;
 
+	private Server server;
+
 
     /**
      * Method to create the UI
@@ -54,6 +59,35 @@ public class SlaveActivity extends Activity
         t = (TextView) findViewById(R.id.slavetest);
         
         mSlave = new Slave(mHandler);
+        
+        //ServoControl 
+
+		// Create TCP server
+		server = null;
+		try
+		{
+			Log.e("ServoControl", "going to request a new Server (blocking call)");
+			
+			Log.e("ServoControl", "onCreate has begun");
+			server = new Server(1337);
+			Log.e("Server", server + ""); 
+			Log.e("ServoControl", "acquired server, starting thread");
+			server.start();
+			Log.e("ServoControl", "thread started");
+
+		} catch (IOException e)
+		{
+			Log.e("microbridge", "Unable to start TCP server", e);
+			System.exit(-1);
+		}
+		
+//		JoystickView joystick = new JoystickView(this, server);
+//		setContentView(joystick);
+//		joystick.requestFocus();
+		
+		
+	
+		
     }
     
     /**
@@ -171,6 +205,19 @@ public class SlaveActivity extends Activity
 	                //String readMessage = new String(readBuf, 0, msg.arg1);
 	                t.setText("Message received at: " + System.currentTimeMillis() + " with directive: " + Command.commandInflater(readBuf[0]).toString());
 	                Log.d("SLAVE", "message received and tried to set!");
+	                
+	                
+	                //send received byte to Arduino
+	            	try
+	        		{
+	        		server.send(new byte[] { (byte)readBuf[0] });
+
+	        		} catch (IOException e)
+	        		{
+	        			Log.e("microbridge", "problem sending TCP message", e);
+	        		}		
+	        		
+	                
 	                break;
 	            case MESSAGE_DEVICE_NAME: break;
             }
