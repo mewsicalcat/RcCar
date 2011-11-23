@@ -5,12 +5,13 @@
 */
 
 // DEFINE PINS
-#define forward 3
-#define backward 5
-#define left 6
-#define right 9
+#define forward 3 //red 
+#define backward 5 //green
+#define left 6 //blue
+#define right 10 //white 
 // Note: Pins 3, 5, 6, 9, 10, and 11 have PWM
 // Note: Pin 0 is Serial RX (receive) and Pin 1 is Serial TX (transmit)
+
 
 void setup()
 {
@@ -18,37 +19,39 @@ void setup()
   pinMode(backward, OUTPUT);
   pinMode(left, OUTPUT);
   pinMode(right, OUTPUT);
+  Serial.begin(57600); 
+
 }
 
 void loop()
 {
   Serial.print("Initializing Test");
   
-  Serial.print("FORWARD 2 Seconds");
+  Serial.println("FORWARD 2 Seconds");
   digitalWrite(forward, HIGH);  // Latch the forward pin at HIGH
   delay(2000);  // Delay for 2 seconds
   digitalWrite(forward, LOW);  // Latch it back to a LOW
   
   delay(500);
-  Serial.print("BACKWARD 2 Seconds");
+  Serial.println("BACKWARD 2 Seconds");
   digitalWrite(backward, HIGH);
   delay(2000);
   digitalWrite(backward, LOW);
   
   delay(500);
-  Serial.print("LEFT 2 Seconds");
+  Serial.println("LEFT 2 Seconds");
   digitalWrite(left, HIGH);
   delay(2000);
   digitalWrite(left, LOW);
   
   delay(500);
-  Serial.print("RIGHT 2 Seconds");
+  Serial.println("RIGHT 2 Seconds");
   digitalWrite(right, HIGH);
   delay(2000);
   digitalWrite(right, LOW);
   
   delay(500);
-  Serial.print("GO FORWARD LEFT 2 Seconds");
+  Serial.println("GO FORWARD LEFT 2 Seconds");
   digitalWrite(forward, HIGH);
   digitalWrite(left, HIGH);
   delay(2000);
@@ -56,7 +59,7 @@ void loop()
   digitalWrite(left, LOW);
   
   delay(500);
-  Serial.print("GO FORWARD RIGHT 2 Seconds");
+  Serial.println("GO FORWARD RIGHT 2 Seconds");
   digitalWrite(forward, HIGH);
   digitalWrite(right, HIGH);
   delay(2000);

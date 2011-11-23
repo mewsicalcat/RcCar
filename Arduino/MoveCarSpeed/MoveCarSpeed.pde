@@ -1,13 +1,15 @@
 #include <SPI.h>
 #include <Adb.h>
 //#include "Command.h" //placed in Arduino's 'libraries' directory 
-
+ 
 // DEFINE PINS (pins = lower case) 
 
-const int forward =  2; 
-const int backward = 5; 
-const int left = 6; 
-const int right = 3; 
+//need: 1 kOhm resistor (brown, black, red) 
+const int forward =  2; //big red
+const int backward = 3; //big blue 
+const int left = 4; //small red
+const int right = 5; //small green
+const int led = 6; //on board led 
 
 int speed = 5; //int from 0-10 for speed of car
 
@@ -35,6 +37,7 @@ void adbEventHandler(Connection * connection, adb_eventType event, uint16_t leng
   {
 //    for (i=0; i<length; i++)
       Serial.println(data[i], HEX);
+      digitalWrite(led, HIGH); //blink led if connection is good 
       
     uint8_t cmd = data[0]; //get user's command
     
@@ -102,7 +105,7 @@ void adbEventHandler(Connection * connection, adb_eventType event, uint16_t leng
         break;  
     }//end switch
       
-      
+    digitalWrite(led, LOW); //toggle off ss
   }
   
   
@@ -118,6 +121,10 @@ void setup()
   pinMode(backward, OUTPUT);
   pinMode(left, OUTPUT);
   pinMode(right, OUTPUT);
+  pinMode(led, OUTPUT); //debug led attached to pin 13
+
+  digitalWrite(led, HIGH); //starts off not blinking 
+
   getLow(); //put here? 
   Serial.println("Setup: all LOW"); 
   
