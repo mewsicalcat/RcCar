@@ -24,9 +24,7 @@ void setup()
 }
 
 void loop()
-{
-  Serial.print("Initializing Test");
-  
+{ 
   Serial.println("FORWARD 2 Seconds");
   digitalWrite(forward, HIGH);  // Latch the forward pin at HIGH
   delay(2000);  // Delay for 2 seconds
