@@ -43,4 +43,17 @@ void loop() {
   Serial.println("BACKWARD 2 Seconds");
   digitalWrite(backward, HIGH);
   delay(4000);
+  
+    getLow(); 
+  delay(500);
+  Serial.println("LEFT 2 Seconds");
+  digitalWrite(left, HIGH);
+  delay(4000);
+  
+    getLow(); 
+  delay(500);
+  Serial.println("RIGHT 2 Seconds");
+  digitalWrite(right, HIGH);
+  delay(4000);
+  
 }
