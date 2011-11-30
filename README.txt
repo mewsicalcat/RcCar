@@ -1,14 +1,12 @@
-﻿Official projects are in RcCarv0.5.4 file and the MinMotorSpeed.pde located in the Arduino folder. The rest of the Arduino sketches in the folder serve as tests for various functionalities.
+Updated Wed Nov 30, 2011
+
+﻿Official projects are in RcCarv0.5.4 file and the MoveCarSpeed.pde located in the Arduino folder. The rest of the Arduino sketches in the folder serve as tests for various functionalities.
 
 The most recent files have the highest version numbers.
 Version 0.5.4 is the current stable version for Iteration 4
 Version 0.5 - 0.5.3.1 are stable versions developed during prototyping phases (Between Iterations 2 and 3)
 
 Versions 0.0 - 0.2 are stable versions developed during planning phases (Iteration 2)
-
-The ServoControl Android project and the Arduino sketches are the most up to date files. 
-
-
 
 
 
