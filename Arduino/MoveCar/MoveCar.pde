@@ -1,23 +1,13 @@
 #include <SPI.h>
 #include <Adb.h>
-//#include "Command.h" //placed in Arduino's 'libraries' directory 
-
-// DEFINE PINS (pins = lower case) 
 
 const int forward =  2; 
-const int backward = 5; 
-const int left = 6; 
-const int right = 3; 
-
-int speed = 5; //int from 0-10 for speed of car
+const int backward = 3; 
+const int left = 4; 
+const int right = 5; 
 
 // Adb connection.
 Connection * connection;
-
-// Elapsed time for ADC sampling
-long lastTime;
-
-//int state; 
 
 void getLow()
 {
@@ -26,6 +16,7 @@ void getLow()
   digitalWrite(forward, LOW);
   digitalWrite(backward, LOW);
 }
+
 // Event handler for the connection. 
 void adbEventHandler(Connection * connection, adb_eventType event, uint16_t length, uint8_t * data)
 {
@@ -33,8 +24,8 @@ void adbEventHandler(Connection * connection, adb_eventType event, uint16_t leng
 
   if (event == ADB_CONNECTION_RECEIVE)
   {
-//    for (i=0; i<length; i++)
       Serial.println(data[i], HEX);
+//      digitalWrite(led, HIGH); //blink led if connection is good 
       
     uint8_t cmd = data[0]; //get user's command
     
@@ -76,7 +67,7 @@ void adbEventHandler(Connection * connection, adb_eventType event, uint16_t leng
         getLow(); 
         digitalWrite(forward, HIGH);
         digitalWrite(right, HIGH);
-               delay(250); 
+        delay(250); 
         break; 
       case 6: 
         Serial.println("BACKWARDLEFT!");
@@ -101,14 +92,7 @@ void adbEventHandler(Connection * connection, adb_eventType event, uint16_t leng
         Serial.println("Invalid input...");
         break;  
     }//end switch
-      
-      
   }
-  
-  
-
-  //move car
-
 }
 
 void setup()
@@ -118,13 +102,10 @@ void setup()
   pinMode(backward, OUTPUT);
   pinMode(left, OUTPUT);
   pinMode(right, OUTPUT);
-  getLow(); //put here? 
+  getLow(); 
   Serial.println("Setup: all LOW"); 
-  
-
-  
-
-  // Initialise the ADB subsystem.  
+ 
+  // Initialize the ADB subsystem.  
   ADB::init();
 
   // Open an ADB stream to the phone's shell. Auto-reconnect

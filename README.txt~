@@ -1,4 +1,4 @@
-﻿Official projects are in RcCarvX.Y.Z files, the ServoControl project, and the ArduinoAndroid42.pde located in the Arduino folder. The rest of the Arduino sketches in the folder serve as tests for various functionalities.
+﻿Official projects are in RcCarv0.5.4 file and the MinMotorSpeed.pde located in the Arduino folder. The rest of the Arduino sketches in the folder serve as tests for various functionalities.
 
 The most recent files have the highest version numbers.
 Version 0.5.4 is the current stable version for Iteration 4
