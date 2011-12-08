@@ -50,13 +50,13 @@ public class SlaveActivity extends Activity
     public static final int MESSAGE_TOAST = 5;
     
 	private static TextView t;
-	private static TextView p; 
+//	private static TextView p; 
 	private Command currState;
 
 	private Server server;
-	public CameraView camera; 
-	public ImageView imv; 
-	public Button b; 
+//	public CameraView camera; 
+//	public ImageView imv; 
+//	public Button b; 
 
     /**
      * Method to create the UI
@@ -68,20 +68,20 @@ public class SlaveActivity extends Activity
         setContentView(R.layout.slaveview);
         
         t = (TextView) findViewById(R.id.slavetest);
-        p = (TextView) findViewById(R.id.pictureTaken);
-        b = (Button) findViewById(id.pictureButton); 
+//        p = (TextView) findViewById(R.id.pictureTaken);
+//        b = (Button) findViewById(id.pictureButton); 
 
         
         mSlave = new Slave(mHandler);
                 
 //        Camera.Parameters parameters = camera.getParameters();
         
-        
-        b.setOnClickListener(new OnClickListener() {
-			public void onClick(View view) {
-				takePicture(); 
-			}
-    }); 
+//        
+//        b.setOnClickListener(new OnClickListener() {
+//			public void onClick(View view) {
+//				takePicture(); 
+//			}
+//    }); 
         
  
         
@@ -93,51 +93,51 @@ public class SlaveActivity extends Activity
 
 		// Create TCP server
         //TODO: uncomment later 
-//		server = null;
-//		try
-//		{
-//			Log.e("ServoControl", "going to request a new Server (blocking call)");
-//			
-//			Log.e("ServoControl", "onCreate has begun");
-//			server = new Server(1337);
-//			Log.e("Server", server + ""); 
-//			Log.e("ServoControl", "acquired server, starting thread");
-//			server.start();
-//			Log.e("ServoControl", "thread started");
-//
-//		} catch (IOException e)
-//		{
-//			Log.e("microbridge", "Unable to start TCP server", e);
-//			System.exit(-1);
-//		}		
+		server = null;
+		try
+		{
+			Log.e("ServoControl", "going to request a new Server (blocking call)");
+			
+			Log.e("ServoControl", "onCreate has begun");
+			server = new Server(1337);
+			Log.e("Server", server + ""); 
+			Log.e("ServoControl", "acquired server, starting thread");
+			server.start();
+			Log.e("ServoControl", "thread started");
+
+		} catch (IOException e)
+		{
+			Log.e("microbridge", "Unable to start TCP server", e);
+			System.exit(-1);
+		}		
     }
     
-    private void takePicture() {
-//    	  camera.takePicture(shutterCallback, rawCallback, jpegCallback); 
-  	  	camera.takePicture(shutterCallback, rawCallback, jpegCallback); 
-    	}
-    	 
-    	ShutterCallback shutterCallback = new ShutterCallback() {
-    	  public void onShutter() {
-    	    // TODO Do something when the shutter closes.
-    	  }
-    	};
-    	 
-    	PictureCallback rawCallback = new PictureCallback() {
-    	  public void onPictureTaken(byte[] _data, Camera _camera) {
-    	    // TODO Do something with the image RAW data.
-//    	  	  Bitmap bmp = BitmapFactory.decodeByteArray(_data, 0, _data.length);
-//    	  	  imv.setImageBitmap(bmp); 
-              p.setText("Picture received at: " + System.currentTimeMillis()); 
-
-    	  }
-    	};
-    	 
-    	PictureCallback jpegCallback = new PictureCallback() {
-    	  public void onPictureTaken(byte[] _data, Camera _camera) {
-    	    // TODO Do something with the image JPEG data.
-    	  }
-    	};
+//    private void takePicture() {
+////    	  camera.takePicture(shutterCallback, rawCallback, jpegCallback); 
+//  	  	camera.takePicture(shutterCallback, rawCallback, jpegCallback); 
+//    	}
+//    	 
+//    	ShutterCallback shutterCallback = new ShutterCallback() {
+//    	  public void onShutter() {
+//    	    // TODO Do something when the shutter closes.
+//    	  }
+//    	};
+//    	 
+//    	PictureCallback rawCallback = new PictureCallback() {
+//    	  public void onPictureTaken(byte[] _data, Camera _camera) {
+//    	    // TODO Do something with the image RAW data.
+////    	  	  Bitmap bmp = BitmapFactory.decodeByteArray(_data, 0, _data.length);
+////    	  	  imv.setImageBitmap(bmp); 
+//              p.setText("Picture received at: " + System.currentTimeMillis()); 
+//
+//    	  }
+//    	};
+//    	 
+//    	PictureCallback jpegCallback = new PictureCallback() {
+//    	  public void onPictureTaken(byte[] _data, Camera _camera) {
+//    	    // TODO Do something with the image JPEG data.
+//    	  }
+//    	};
     	
     	
     
@@ -185,7 +185,7 @@ public class SlaveActivity extends Activity
      */
     public void onResume()
     {
-    	camera = Camera.open(); 
+//    	camera = Camera.open(); 
     	super.onResume();
     }
     
@@ -194,7 +194,7 @@ public class SlaveActivity extends Activity
      */
     public void onPause()
     {
-        camera.release(); 
+//        camera.release(); 
     	super.onPause();
 
     }
@@ -204,7 +204,7 @@ public class SlaveActivity extends Activity
      */
     public void onStop()
     {
-    	camera.a(); 
+//    	camera.a(); 
     	super.onStop();
     }
     
@@ -214,7 +214,7 @@ public class SlaveActivity extends Activity
      */
     public void onDestroy()
     {
-    	camera.release(); 
+//    	camera.release(); 
     	super.onDestroy();
 
         if (mSlave != null) 

@@ -85,8 +85,8 @@ public class Slave
 		return disconnectFromHost();
 	}
 	
-	public void sendPicture(byte[] data)
-	{
-		mReceiver.write(data); 
-	}
+//	public void sendPicture(byte[] data)
+//	{
+//		mReceiver.write(data); 
+//	}
 }
