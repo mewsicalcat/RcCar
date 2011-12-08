@@ -15,4 +15,6 @@
     <string name="forwardLeft">Forward Left</string>
     <string name="backwardRight">Backward Right</string>
     <string name="backwardLeft">Backward Left</string>
+    <string name="pictureTaken">"Picture Taken! "</string>
+    <string name="takePicture">click to take picture</string>
 </resources>

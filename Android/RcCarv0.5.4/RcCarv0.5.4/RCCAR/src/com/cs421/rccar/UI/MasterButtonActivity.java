@@ -211,6 +211,7 @@ public class MasterButtonActivity extends Activity {
 	            case MESSAGE_WRITE:
 	                break;
 	            case MESSAGE_READ:
+	            	
 	                break;
 	            case MESSAGE_DEVICE_NAME:
 	                break;

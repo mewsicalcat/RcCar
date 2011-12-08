@@ -9,13 +9,21 @@ import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.hardware.Camera;
+import android.hardware.Camera.PictureCallback;
+import android.hardware.Camera.ShutterCallback;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cs421.rccar.R;
+import com.cs421.rccar.R.id;
 import com.cs421.rccar.Slave.Slave;
 import com.cs421.rccar.Util.BluetoothCommunicationService;
 import com.cs421.rccar.Util.Command;
@@ -42,10 +50,13 @@ public class SlaveActivity extends Activity
     public static final int MESSAGE_TOAST = 5;
     
 	private static TextView t;
+	private static TextView p; 
 	private Command currState;
 
 	private Server server;
-
+	public CameraView camera; 
+	public ImageView imv; 
+	public Button b; 
 
     /**
      * Method to create the UI
@@ -55,40 +66,80 @@ public class SlaveActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.slaveview);
-
+        
         t = (TextView) findViewById(R.id.slavetest);
+        p = (TextView) findViewById(R.id.pictureTaken);
+        b = (Button) findViewById(id.pictureButton); 
+
         
         mSlave = new Slave(mHandler);
+                
+//        Camera.Parameters parameters = camera.getParameters();
+        
+        
+        b.setOnClickListener(new OnClickListener() {
+			public void onClick(View view) {
+				takePicture(); 
+			}
+    }); 
+        
+ 
+        
+//        parameters.setPictureFormat(PixelFormat.JPEG); 
+//        camera.setParameters(parameters);
+        
         
         //ServoControl 
 
 		// Create TCP server
-		server = null;
-		try
-		{
-			Log.e("ServoControl", "going to request a new Server (blocking call)");
-			
-			Log.e("ServoControl", "onCreate has begun");
-			server = new Server(1337);
-			Log.e("Server", server + ""); 
-			Log.e("ServoControl", "acquired server, starting thread");
-			server.start();
-			Log.e("ServoControl", "thread started");
-
-		} catch (IOException e)
-		{
-			Log.e("microbridge", "Unable to start TCP server", e);
-			System.exit(-1);
-		}
-		
-//		JoystickView joystick = new JoystickView(this, server);
-//		setContentView(joystick);
-//		joystick.requestFocus();
-		
-		
-	
-		
+        //TODO: uncomment later 
+//		server = null;
+//		try
+//		{
+//			Log.e("ServoControl", "going to request a new Server (blocking call)");
+//			
+//			Log.e("ServoControl", "onCreate has begun");
+//			server = new Server(1337);
+//			Log.e("Server", server + ""); 
+//			Log.e("ServoControl", "acquired server, starting thread");
+//			server.start();
+//			Log.e("ServoControl", "thread started");
+//
+//		} catch (IOException e)
+//		{
+//			Log.e("microbridge", "Unable to start TCP server", e);
+//			System.exit(-1);
+//		}		
     }
+    
+    private void takePicture() {
+//    	  camera.takePicture(shutterCallback, rawCallback, jpegCallback); 
+  	  	camera.takePicture(shutterCallback, rawCallback, jpegCallback); 
+    	}
+    	 
+    	ShutterCallback shutterCallback = new ShutterCallback() {
+    	  public void onShutter() {
+    	    // TODO Do something when the shutter closes.
+    	  }
+    	};
+    	 
+    	PictureCallback rawCallback = new PictureCallback() {
+    	  public void onPictureTaken(byte[] _data, Camera _camera) {
+    	    // TODO Do something with the image RAW data.
+//    	  	  Bitmap bmp = BitmapFactory.decodeByteArray(_data, 0, _data.length);
+//    	  	  imv.setImageBitmap(bmp); 
+              p.setText("Picture received at: " + System.currentTimeMillis()); 
+
+    	  }
+    	};
+    	 
+    	PictureCallback jpegCallback = new PictureCallback() {
+    	  public void onPictureTaken(byte[] _data, Camera _camera) {
+    	    // TODO Do something with the image JPEG data.
+    	  }
+    	};
+    	
+    	
     
     /**
      * Ensures that this device is discoverable via Bluetooth Connection
@@ -111,6 +162,8 @@ public class SlaveActivity extends Activity
      */
     public void onStart()
     {
+//        camera = Camera.open(); 
+
     	super.onStart();
     	ensureDiscoverable();
     	mSlave.start();
@@ -132,6 +185,7 @@ public class SlaveActivity extends Activity
      */
     public void onResume()
     {
+    	camera = Camera.open(); 
     	super.onResume();
     }
     
@@ -140,7 +194,9 @@ public class SlaveActivity extends Activity
      */
     public void onPause()
     {
+        camera.release(); 
     	super.onPause();
+
     }
     
     /**
@@ -148,6 +204,7 @@ public class SlaveActivity extends Activity
      */
     public void onStop()
     {
+    	camera.a(); 
     	super.onStop();
     }
     
@@ -157,7 +214,8 @@ public class SlaveActivity extends Activity
      */
     public void onDestroy()
     {
-        super.onDestroy();
+    	camera.release(); 
+    	super.onDestroy();
 
         if (mSlave != null) 
         	mSlave.stop();   

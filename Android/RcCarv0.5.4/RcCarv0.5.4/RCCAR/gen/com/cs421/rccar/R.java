@@ -12,6 +12,7 @@ public final class R {
     }
     public static final class drawable {
         public static final int icon=0x7f020000;
+        public static final int imageview=0x7f020001;
     }
     public static final class id {
         public static final int LaunchSlave=0x7f05000b;
@@ -24,6 +25,8 @@ public final class R {
         public static final int launchMaster=0x7f05000a;
         public static final int left=0x7f050002;
         public static final int linearLayout1=0x7f05000e;
+        public static final int pictureButton=0x7f050012;
+        public static final int pictureTaken=0x7f050011;
         public static final int relativeLayout1=0x7f050000;
         public static final int right=0x7f050003;
         public static final int seekBar1=0x7f05000f;
@@ -50,8 +53,10 @@ public final class R {
         public static final int launchSlave=0x7f040003;
         public static final int left=0x7f040005;
         public static final int not_connected=0x7f04000a;
+        public static final int pictureTaken=0x7f04000f;
         public static final int right=0x7f040006;
         public static final int sendMessage=0x7f040009;
         public static final int stop=0x7f040008;
+        public static final int takePicture=0x7f040010;
     }
 }
