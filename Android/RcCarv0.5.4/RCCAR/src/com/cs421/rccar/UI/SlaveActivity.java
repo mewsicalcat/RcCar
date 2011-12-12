@@ -1,6 +1,5 @@
 package com.cs421.rccar.UI;
 
-import java.io.IOException;
 import java.util.Set;
 
 import org.microbridge.server.Server;
@@ -10,14 +9,11 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.cs421.rccar.R;
+import com.cs421.rccar.Controller.SlaveController;
 import com.cs421.rccar.Slave.Slave;
-import com.cs421.rccar.Util.BluetoothCommunicationService;
 import com.cs421.rccar.Util.Command;
 
 /**
@@ -33,14 +29,8 @@ import com.cs421.rccar.Util.Command;
  */
 public class SlaveActivity extends Activity 
 {
-	private Slave mSlave;
-    // Message types sent from the BluetoothChatService Handler
-    public static final int MESSAGE_STATE_CHANGE = 1;
-    public static final int MESSAGE_READ = 2;
-    public static final int MESSAGE_WRITE = 3;
-    public static final int MESSAGE_DEVICE_NAME = 4;
-    public static final int MESSAGE_TOAST = 5;
-    
+	private SlaveController mSlave;
+       
 	private static TextView t;
 	private Command currState;
 
@@ -58,7 +48,7 @@ public class SlaveActivity extends Activity
 
         t = (TextView) findViewById(R.id.slavetest);
         ensureDiscoverable();
-        mSlave = new Slave(mHandler);
+        mSlave = new Slave();
         
         //ServoControl 
         /*
@@ -141,7 +131,7 @@ public class SlaveActivity extends Activity
     public void onPause()
     {
     	super.onPause();
-    	mSlave.stop();
+    	//mSlave.stop();
     }
     
     /**
@@ -162,17 +152,7 @@ public class SlaveActivity extends Activity
         super.onDestroy();
         mSlave.stop();  
     }
-    
-    /**
-     * @deprecated
-     * For testing purposes only!  Passes a message to the handler
-     * @param c the command to send
-     */
-    public void sendMessage(Command c)
-    {
-    	mHandler.obtainMessage(SlaveActivity.MESSAGE_READ, (int) c.getBytes(), -1, new byte[1024]).sendToTarget();
-    }
-    
+        
     /**
      * Returns the state of the vehicle
      * @return the state of the vehicle
@@ -182,50 +162,10 @@ public class SlaveActivity extends Activity
     	return currState;
     }
     
-    //Message handler to receive messages from the BluetoothReceiver object
-    private final Handler mHandler = new Handler() 
+    public static void setText(String text)
     {
-        @Override
-        public void handleMessage(Message msg) 
-        {
-        	Log.d("SLAVE", "handleMessage");
-	        switch (msg.what) 
-	        {
-	            case MESSAGE_STATE_CHANGE:
-	                switch (msg.arg1) 
-	                {
-	                	case BluetoothCommunicationService.STATE_CONNECTED: break;
-	                	case BluetoothCommunicationService.STATE_CONNECTING: break;
-	                	case BluetoothCommunicationService.STATE_LISTEN: break;
-	                	case BluetoothCommunicationService.STATE_NONE: break;
-	                }
-	                break;
-	            case MESSAGE_WRITE: break;
-	            case MESSAGE_READ:
-	                byte[] readBuf = (byte[]) msg.obj;
-	                //String readMessage = new String(readBuf, 0, msg.arg1);
-	               
-	                Log.d("SLAVE", "message received and tried to set!");
-	                
-	                mSlave.driveCommand(Command.commandInflater(readBuf[0]));
-	                t.setText("Message received at: " + mSlave.getLastTimeReceived() + " with directive: " + Command.commandInflater(readBuf[0]).toString());
-	                
-	                /*
-	                //send received byte to Arduino
-	            	try
-	        		{
-	        		server.send(new byte[] { (byte)readBuf[0] });
+    	t.setText(text);
+    }
+    
 
-	        		} 
-	            	catch (IOException e)
-	        		{
-	        			Log.e("microbridge", "problem sending TCP message", e);
-	        		}		
-	        		*/
-	                
-	                break;
-	            case MESSAGE_DEVICE_NAME: break;
-            }
-        }
-    };
 }

@@ -12,8 +12,8 @@ import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.util.Log;
 
+import com.cs421.rccar.Slave.Slave;
 import com.cs421.rccar.UI.MainActivity;
-import com.cs421.rccar.UI.SlaveActivity;
 
 /**
  * A service which handles all states of a Bluetooth connection
@@ -524,7 +524,7 @@ public class BluetoothCommunicationService
     			try
     			{
     				bytes = mInputStream.read(buffer);
-    				mHandler.obtainMessage(SlaveActivity.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
+    				mHandler.obtainMessage(Slave.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
     				
     		    	if (MainActivity.DEBUG)
     		    	{	
