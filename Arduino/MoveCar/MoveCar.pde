@@ -1,22 +1,29 @@
 #include <SPI.h>
 #include <Adb.h>
+//#include "Command.h" //placed in Arduino's 'libraries' directory 
+
+// DEFINE PINS (pins = lower case) 
 
 const int forward =  2; 
-const int backward = 3; 
-const int left = 4; 
-const int right = 5; 
+const int backward = 5; 
+const int left = 6; 
+const int right = 3; 
 
 // Adb connection.
 Connection * connection;
 
-void getLow()
+// Elapsed time for ADC sampling
+long lastTime;
+
+//int state; 
+
+void setLow()
 {
   digitalWrite(right, LOW);
   digitalWrite(left, LOW);
   digitalWrite(forward, LOW);
   digitalWrite(backward, LOW);
 }
-
 // Event handler for the connection. 
 void adbEventHandler(Connection * connection, adb_eventType event, uint16_t length, uint8_t * data)
 {
@@ -24,8 +31,7 @@ void adbEventHandler(Connection * connection, adb_eventType event, uint16_t leng
 
   if (event == ADB_CONNECTION_RECEIVE)
   {
-      Serial.println(data[i], HEX);
-//      digitalWrite(led, HIGH); //blink led if connection is good 
+    Serial.println(data[i], HEX);
       
     uint8_t cmd = data[0]; //get user's command
     
@@ -33,66 +39,73 @@ void adbEventHandler(Connection * connection, adb_eventType event, uint16_t leng
     {
       case 0: 
         Serial.println("FORWARD!");
-        getLow(); 
+        setLow(); 
         digitalWrite(forward, HIGH);
-        delay(250); 
+        delay(100);    // Delay the output a little bit to preven
         break; 
       case 1: 
         Serial.println("BACKWARD!");
-        getLow(); 
+        setLow(); 
         digitalWrite(backward, HIGH); 
-        delay(250);  
+        delay(100);  
         break; 
       case 2: 
         Serial.println("LEFT!");
-        getLow(); 
+        setLow(); 
         digitalWrite( left, HIGH);    
-        delay(250);      
+        delay(100);      
         break; 
       case 3: 
         Serial.println("RIGHT!");
-        getLow(); 
+        setLow(); 
         digitalWrite(right, HIGH);   
-         delay(250);       
+         delay(100);       
         break; 
       case 4: 
         Serial.println("FORWARDLEFT!");
-        getLow(); 
+        setLow(); 
         digitalWrite(forward, HIGH);
         digitalWrite( left, HIGH);   
-        delay(250); 
+        delay(100); 
         break; 
       case 5: 
         Serial.println("FORWARDRIGHT!");
-        getLow(); 
+        setLow(); 
         digitalWrite(forward, HIGH);
         digitalWrite(right, HIGH);
-        delay(250); 
+        delay(100); 
         break; 
       case 6: 
         Serial.println("BACKWARDLEFT!");
-        getLow(); 
+        setLow(); 
         digitalWrite(backward, HIGH);
         digitalWrite(left, HIGH); 
-       delay(250);         
+       delay(100);         
         break; 
       case 7: 
         Serial.println("BACKWARDRIGHT!");
-        getLow(); 
+        setLow(); 
         digitalWrite(backward, HIGH);
         digitalWrite(right, HIGH);  
-               delay(250); 
+        delay(100); 
         break; 
       case 8: 
        Serial.println("STOP!"); 
-        getLow();        
-        delay(250);        
+        setLow();        
+        delay(100);        
         break; 
       default: 
         Serial.println("Invalid input...");
         break;  
     }//end switch
+      
+      
   }
+  
+  
+
+  //move car
+
 }
 
 void setup()
@@ -102,10 +115,11 @@ void setup()
   pinMode(backward, OUTPUT);
   pinMode(left, OUTPUT);
   pinMode(right, OUTPUT);
-  getLow(); 
-  Serial.println("Setup: all LOW"); 
- 
-  // Initialize the ADB subsystem.  
+  setLow(); //
+  Serial.println("Setup: all LOW");
+  
+
+  // Initialise the ADB subsystem.  
   ADB::init();
 
   // Open an ADB stream to the phone's shell. Auto-reconnect
@@ -114,13 +128,8 @@ void setup()
 
 void loop()
 { 
-
   ADB::poll();
-  //uint16_t data = 12345; 
-
-  // if (connection->status == ADB_OPEN)
-  //connection->write(2, (uint8_t*) &data); //convert to pointer? 
-
+  
   // Poll the ADB subsystem.
   while(connection->status == ADB_RECEIVING || connection->status == ADB_WRITING) 
   {    

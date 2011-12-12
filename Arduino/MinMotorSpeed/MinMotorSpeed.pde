@@ -13,16 +13,13 @@ Test script to see if can go through test sequence (similiar to Arduino car test
  
  Expected output: PWM voltages from 0:.5:5 to be measured using multimeter 
  */
-//black: forward
-//red: backward
-//black: left
-//red: right
 
 //need: 1 kOhm resistor (brown, black, red) 
-const int forward =  5; //big red
-const int backward = 6; //big blue 
-const int left = 10; //small red
-const int right = 11; //small green
+const int forward =  2; //big red
+const int backward = 3; //big blue 
+const int left = 4; //small red
+const int right = 5; //small green
+const int led = 6; //on board led 
 
 const int FROM_HIGH = 100; 
 const int FROM_LOW = 0; 
@@ -33,19 +30,15 @@ int outputValue; //value to send to analogWrite (voltage between 0 and 5 V)
 void setup() {
   // initialize serial communications at 9600 bps:
   Serial.begin(9600); 
-  pinMode(forward, OUTPUT);
-  pinMode(backward, OUTPUT);
-  pinMode(left, OUTPUT);
-  pinMode(right, OUTPUT);
 }
 
 void loop() {
   
-  for (int i = 0; i < FROM_HIGH; i+=5) //TODO: change to i++ for motor speed testing 
+  for (int i = 0; i < FROM_HIGH; i+=10) //TODO: change to i++ for motor speed testing 
   { 
   
     // map it to the range of the analog out:
-  outputValue = map(i, FROM_LOW, FROM_HIGH, TO_LOW, TO_HIGH);  
+  outputValue = map(outputValue, FROM_LOW, FROM_HIGH, TO_LOW, TO_HIGH);  
   
   
   // Test ability to vary analog output on all 4 pins 
@@ -61,7 +54,7 @@ void loop() {
   // wait 10 milliseconds before the next loop
   // for the analog-to-digital converter to settle
   // after the last reading:
-  delay(2000); //see when motor starts moving (TODO: increase so can wait while take multimeter readings)  
+  delay(15000); //see when motor starts moving (TODO: increase so can wait while take multimeter readings)  
   } 
                   
 }
