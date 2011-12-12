@@ -7,10 +7,10 @@ import org.microbridge.server.Server;
 import android.util.Log;
 
 import com.cs421.rccar.Controller.Driveable;
+import com.cs421.rccar.UI.MainActivity;
 import com.cs421.rccar.Util.BluetoothState;
 import com.cs421.rccar.Util.Command;
 
-//import android.hardware.usb.UsbDevice;
 
 /**
  * This class acts as a high-level representation for an
@@ -36,18 +36,35 @@ public class UsbCar implements Driveable
 		server = null;
 		try
 		{
-			Log.e("ServoControl", "going to request a new Server (blocking call)");
+			if (MainActivity.DEBUG)
+			{	
+				Log.e("ServoControl", "going to request a new Server (blocking call)");
+				Log.e("ServoControl", "onCreate has begun");
+			}
 			
-			Log.e("ServoControl", "onCreate has begun");
 			server = new Server(1337);
-			Log.e("Server", server + ""); 
-			Log.e("ServoControl", "acquired server, starting thread");
+			
+			if (MainActivity.DEBUG)
+			{
+				Log.e("Server", server + ""); 
+				Log.e("ServoControl", "acquired server, starting thread");
+			}
+			
 			server.start();
-			Log.e("ServoControl", "thread started");
+			
+			if (MainActivity.DEBUG)
+			{	
+				Log.e("ServoControl", "thread started");
+			}
 
-		} catch (IOException e)
+		} 
+		catch (IOException e)
 		{
-			Log.e("microbridge", "Unable to start TCP server", e);
+			if (MainActivity.DEBUG)
+			{
+				Log.e("microbridge", "Unable to start TCP server", e);
+			}
+			
 			System.exit(-1);
 		}
 	}
@@ -67,15 +84,13 @@ public class UsbCar implements Driveable
 		} 
     	catch (IOException e)
 		{
-			Log.e("microbridge", "problem sending TCP message", e);
+    		if (MainActivity.DEBUG)
+    		{	
+    			Log.e("microbridge", "problem sending TCP message", e);
+    		}
 		}		
-		
-		// TODO Auto-generated method stub
-
 	}
-	
-	public void driveCommand(Command mCommand, byte[] b){};
-	
+		
 	/**
 	 * Method to perform all required initializations to start the 
 	 * communication service for the car representation
@@ -90,6 +105,8 @@ public class UsbCar implements Driveable
 	 */
 	public boolean stop()
 	{
+		/* MUST TEST!! */
+		server.stop();
 		return true;
 	}
 

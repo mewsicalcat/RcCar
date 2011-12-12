@@ -1,5 +1,8 @@
 package com.cs421.rccar.Slave;
 
+import java.util.Set;
+
+import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Handler;
 import android.os.Message;
@@ -84,6 +87,23 @@ public class Slave implements SlaveController
     	mReceiver.start();
     	mTimer = new IntervalTimer();
     	mTimer.start();
+    	
+    	startConnection();
+	}
+	
+	public void startConnection()
+	{
+    	
+    	BluetoothAdapter mAdapter = BluetoothAdapter.getDefaultAdapter();
+    	
+    	Set<BluetoothDevice> pairedDevices = mAdapter.getBondedDevices();	//get paired Android phones
+    	if (pairedDevices.size() > 0)										//if there are any paired phones
+    	{
+    		for (BluetoothDevice device : pairedDevices)
+    		{
+    			mReceiver.connect(device);								//connect to that phone
+    		}
+    	}
 	}
 	
 	/**
@@ -142,7 +162,6 @@ public class Slave implements SlaveController
 	                
 	                mDriveable.driveCommand(Command.commandInflater(readBuf[0]));
 	                SlaveActivity.setText("Message received at: " + System.currentTimeMillis() + " with directive: " + Command.commandInflater(readBuf[0]).toString());
-	                //t.setText("Message received at: " + mSlave.getLastTimeReceived() + " with directive: " + Command.commandInflater(readBuf[0]).toString());
 	                
 	                break;
 	            case MESSAGE_DEVICE_NAME: break;
@@ -183,18 +202,16 @@ public class Slave implements SlaveController
 	public void sendPicture(byte[] data)
 	{
 		// TODO Auto-generated method stub
-		
 	}
 
 	public void sendVideo(byte[] data)
 	{
 		// TODO Auto-generated method stub
-		
 	}
 
 	public BluetoothState getState()
 	{
 		// TODO Auto-generated method stub
-		return null;
+		return mDriveable.getState();
 	}
 }
