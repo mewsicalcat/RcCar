@@ -12,6 +12,7 @@ import android.bluetooth.BluetoothSocket;
 import android.os.Handler;
 import android.util.Log;
 
+import com.cs421.rccar.UI.MainActivity;
 import com.cs421.rccar.UI.SlaveActivity;
 
 /**
@@ -83,8 +84,10 @@ public class BluetoothCommunicationService
      */
     public synchronized void start()
     {
-    	Log.d("BCS", "start()");
-    	
+    	if (MainActivity.DEBUG)
+    	{	
+    		Log.d("BCS", "start()");
+    	}
     	if (mConnectThread != null)
     	{
     		mConnectThread.cancel();
@@ -113,7 +116,10 @@ public class BluetoothCommunicationService
      */
     public synchronized void connected(BluetoothSocket socket, BluetoothDevice device)
     {
-    	Log.d("BCS", "connected()");
+    	if (MainActivity.DEBUG)
+    	{	
+    		Log.d("BCS", "connected()");
+    	}
     	
     	if (mConnectThread != null)
     	{
@@ -135,9 +141,7 @@ public class BluetoothCommunicationService
     	
     	mConnectedThread = new ConnectedThread(socket);
     	mConnectedThread.start();
-    	
-    	//Message handler stuff here
-    	
+
     	setState(BluetoothState.STATE_CONNECTED);
     }
     
@@ -146,10 +150,11 @@ public class BluetoothCommunicationService
      */
     private void connectionFailed()
     {
-    	//Message handler, send message back to activity
+    	if (MainActivity.DEBUG)
+    	{	
+    		Log.d("BCS", "connectionFailed()");
+    	}
     	
-    	//Start service over!
-    	Log.d("BCS", "connectionFailed()");
     	BluetoothCommunicationService.this.start();
     }
     
@@ -158,9 +163,11 @@ public class BluetoothCommunicationService
      */
     private void connectionLost()
     {
-    	//Message handler, send message back to activity
+    	if (MainActivity.DEBUG)
+    	{	
+    		Log.d("BCS", "connectionLost()");
+    	}
     	
-    	//Start service over!
     	BluetoothCommunicationService.this.start();
     }
     
@@ -170,7 +177,10 @@ public class BluetoothCommunicationService
      */
     public synchronized void connect(BluetoothDevice device) 
     {
-    	Log.d("BCS", "connect()");
+    	if (MainActivity.DEBUG)
+    	{	
+    		Log.d("BCS", "connect()");
+    	}
     	
         // Cancel any thread attempting to make a connection
         if (mState == BluetoothState.STATE_CONNECTING)
@@ -201,8 +211,10 @@ public class BluetoothCommunicationService
      */
     public synchronized boolean stop() 
     {
-
-    	Log.d("ARG", "Stop");
+    	if (MainActivity.DEBUG)
+    	{	
+    		Log.d("BCS", "Stop()");
+    	}
     	
         if (mConnectThread != null) 
         {
@@ -246,7 +258,10 @@ public class BluetoothCommunicationService
         // Perform the write unsynchronized
         r.write(out);
         
-        Log.d("BCS", "BCS write!");
+    	if (MainActivity.DEBUG)
+    	{	
+    		Log.d("BCS", "BCS write()s");
+    	}
     }
     
     /**
@@ -254,7 +269,9 @@ public class BluetoothCommunicationService
      * with an external Bluetooth device
      * Used with permission, originally developed on the Android Developer website
      * 
-     * @author David
+     * @author David Widen
+     * @author Jessie Young
+     * @author Thomas Cheng
      *
      */
     private class AcceptThread extends Thread
@@ -282,8 +299,11 @@ public class BluetoothCommunicationService
     	 */
     	public void run()
     	{
-    		
-    		Log.d("BCS", "Accept ThreadRun!");
+        	if (MainActivity.DEBUG)
+        	{	
+        		Log.d("BCS", "Accept ThreadRun()");
+        	}
+        	
     		BluetoothSocket socket = null;
     		
     		while (mState != BluetoothState.STATE_CONNECTED)
@@ -293,11 +313,19 @@ public class BluetoothCommunicationService
     			try
     			{
     				socket = mServerSocket.accept();
-    				Log.d("BCS", "still running mServerSocket.accept()");
+    				
+    		    	if (MainActivity.DEBUG)
+    		    	{	
+    		    		Log.d("BCS", "still running mServerSocket.accept()");
+    		    	}
     			}
     			catch (IOException e)
     			{
-    				Log.d("BCS", "Accept Thread caught Exception");
+    		    	if (MainActivity.DEBUG)
+    		    	{	
+    		    		Log.d("BCS", "Accept Thread caught Exception");
+    		    	}
+    		    	
     				break;
     			}
     		
@@ -348,7 +376,7 @@ public class BluetoothCommunicationService
      * Encapsulates a BluetoothSocket and an external BluetoothDevice so they can be
      * connected to this Android device
      * Used with permission, originally developed on the Android Developer website
-     * See BluetoothCommunicationService
+     * See BluetoothChatService
      * 
      * @author David Widen
      * @author Jessie Young
@@ -375,7 +403,10 @@ public class BluetoothCommunicationService
     		}
     		catch (IOException e)
     		{
-    			Log.d("BCS", "cannot createRfcommSocketToServiceRecord() in ConnectThread Constructor");
+    	    	if (MainActivity.DEBUG)
+    	    	{	
+    	    		Log.d("BCS", "cannot createRfcommSocketToServiceRecord() in ConnectThread Constructor");
+    	    	}
     		}
     		
     		mSocket = temp;
@@ -386,7 +417,10 @@ public class BluetoothCommunicationService
     	 */
     	public void run()
     	{
-    		Log.d("BCS", "Connect Thread Run!");
+        	if (MainActivity.DEBUG)
+        	{	
+        		Log.d("BCS", "Connect Thread Run!");
+        	}
     		
     		mAdapter.cancelDiscovery();
     		
@@ -404,6 +438,7 @@ public class BluetoothCommunicationService
     			{
     				//add processing for failure to close
     			}
+    			
     			connectionFailed();
     			return;
     		}
@@ -477,8 +512,10 @@ public class BluetoothCommunicationService
     	 */
     	public void run()
     	{
-    		
-    		Log.d("BCS", "ConnectedThreadRun!");
+        	if (MainActivity.DEBUG)
+        	{	
+        		Log.d("BCS", "ConnectedThreadRun()");
+        	}
     		byte[] buffer = new byte[1024];
     		int bytes;
     		
@@ -487,13 +524,19 @@ public class BluetoothCommunicationService
     			try
     			{
     				bytes = mInputStream.read(buffer);
-    				//handler stuff?  send to activity?
     				mHandler.obtainMessage(SlaveActivity.MESSAGE_READ, bytes, -1, buffer).sendToTarget();
-    				Log.d("BCS", "obtainedMessage!");
+    				
+    		    	if (MainActivity.DEBUG)
+    		    	{	
+    		    		Log.d("BCS", "obtainedMessage");
+    		    	}
     			}
     			catch (IOException e)
     			{
-    				Log.d("BCS", "going to run connectionLost()");
+    		    	if (MainActivity.DEBUG)
+    		    	{	
+    		    		Log.d("BCS", "going to run connectionLost()");
+    		    	}
     				connectionLost();
     				BluetoothCommunicationService.this.start();
     				break;
@@ -517,7 +560,10 @@ public class BluetoothCommunicationService
     			//handle failure to write data
     		}
     		
-    		Log.d("BCS", "ConnectedThread write()");
+        	if (MainActivity.DEBUG)
+        	{	
+        		Log.d("BCS", "ConnectedThread write()");
+        	}
     	}
     	
     	/**

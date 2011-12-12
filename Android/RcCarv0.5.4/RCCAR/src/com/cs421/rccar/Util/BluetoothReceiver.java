@@ -1,8 +1,5 @@
 package com.cs421.rccar.Util;
 
-import java.util.Set;
-
-import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.os.Handler;
 

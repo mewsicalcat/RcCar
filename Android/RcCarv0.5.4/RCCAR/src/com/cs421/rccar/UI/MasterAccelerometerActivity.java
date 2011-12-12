@@ -6,9 +6,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.PowerManager;
-import android.os.PowerManager.WakeLock;
 import android.util.Log;
 import android.view.Display;
 import android.view.Surface;
@@ -44,8 +41,8 @@ public class MasterAccelerometerActivity extends Activity {
 	private float mSensorX;
 	private float mSensorY;
 	private float mSensorZ;
-	private PowerManager mPowerManager;
-	private WakeLock mWakeLock;
+	//private PowerManager mPowerManager;
+	//private WakeLock mWakeLock;
 	private AccelerometerListener mAccelerometerListener;
 	
     /**
@@ -61,18 +58,16 @@ public class MasterAccelerometerActivity extends Activity {
         
         // Code just to learn more about the accelerometer library
         
-        mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
+        //mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
         
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         mDisplay = mWindowManager.getDefaultDisplay();
         
-        mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, getClass().getName());
+        //mWakeLock = mPowerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK, getClass().getName());
         
         mTextView = (TextView) findViewById(R.id.accel_status);
         
-        mAccelerometerListener = new AccelerometerListener();
-        
-        mMaster = new Master(new Handler());
+        mMaster = new Master();
     }
     
     /**
@@ -80,7 +75,7 @@ public class MasterAccelerometerActivity extends Activity {
      */
     public void toggleMode()
     {
-    	
+    	//TO DO
     }
     
     public class AccelerometerListener implements SensorEventListener
@@ -94,12 +89,17 @@ public class MasterAccelerometerActivity extends Activity {
     		Log.d("MasterAccelerometerActivity", "constructor run");
     	}
     	
-    	/**
-    	 * @Override
-    	 */
+    	public void stop()
+    	{
+    		mSensorManager.unregisterListener(this);
+    	}
+    	
 	    public void onSensorChanged(SensorEvent event)
 	    {
-	    	Log.d("MasterAccelerometerActivity", "onSensorChanged");
+	    	if (MainActivity.DEBUG)
+	    	{
+	    		Log.d("MasterAccelerometerActivity", "onSensorChanged");
+	    	}
 	    	
 	    	if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER)
 	    		return;
@@ -216,10 +216,7 @@ public class MasterAccelerometerActivity extends Activity {
 	    	mTextView.setText("Rotation: " + rotation + "\nX: " + mSensorX + "\nY: " + mSensorY + "\nZ: " + mSensorZ + "\ntime: " + System.nanoTime() + "\nDirective: " + directive);
 	    }
 	    
-	    /**
-	     * @Override
-	     */
-		public void onAccuracyChanged(Sensor arg0, int arg1)
+	    public void onAccuracyChanged(Sensor arg0, int arg1)
 		{
 			// TODO Auto-generated method stub
 			
@@ -230,34 +227,35 @@ public class MasterAccelerometerActivity extends Activity {
     public void onStart()
     {
     	super.onStart();
-    	//mMaster.disconnectFromSlave();
     	mMaster.start();
+    	mAccelerometerListener = new AccelerometerListener();
     }
     
+    @Override
     public void onResume()
     {
     	super.onResume();
-    	mAccelerometerListener = null;
     }
     
+    @Override
     public void onPause()
     {
     	super.onPause();
     	mMaster.disconnectFromSlave();
-    	mAccelerometerListener = null;
     }
     
+    @Override
     public void onStop()
     {
     	super.onStop();
     	mMaster.disconnectFromSlave();
-    	mAccelerometerListener = null;
+    	mAccelerometerListener.stop();
     }
     
+    @Override
     public void onDestroy()
     {
     	super.onDestroy();
     	mMaster.disconnectFromSlave();
-    	mAccelerometerListener = null;
     }
 }

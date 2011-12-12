@@ -35,7 +35,8 @@ public interface Driveable
 	public boolean stop();
 	
 	/**
-	 * 
+	 * Gets the current state of the Bluetooth Connection
+	 * @return the current Bluetooth state
 	 */
 	public BluetoothState getState();
 }

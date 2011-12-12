@@ -2,15 +2,13 @@ package com.cs421.rccar.UI;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
 import com.cs421.rccar.R;
+import com.cs421.rccar.Controller.MasterController;
 import com.cs421.rccar.Master.Master;
-import com.cs421.rccar.Util.BluetoothCommunicationService;
 import com.cs421.rccar.Util.Command;
 
 /**
@@ -27,11 +25,7 @@ import com.cs421.rccar.Util.Command;
  */
 public class MasterButtonActivity extends Activity {
     
-	private Master mMaster;
-    private static final int MESSAGE_STATE_CHANGE = 1;
-    private static final int MESSAGE_READ = 2;
-    private static final int MESSAGE_WRITE = 3;
-    private static final int MESSAGE_DEVICE_NAME = 4;
+	private MasterController mMasterController;
 	
     /**
      * Method to create the UI
@@ -60,7 +54,7 @@ public class MasterButtonActivity extends Activity {
 			
 			public void onClick(View v)
 			{
-				mMaster.sendCarCommand(Command.FORWARD);
+				mMasterController.sendCarCommand(Command.FORWARD);
 			}
 		});
         
@@ -69,7 +63,7 @@ public class MasterButtonActivity extends Activity {
 			
 			public void onClick(View v)
 			{
-				mMaster.sendCarCommand(Command.BACKWARD);
+				mMasterController.sendCarCommand(Command.BACKWARD);
 			}
 		});
         
@@ -78,7 +72,7 @@ public class MasterButtonActivity extends Activity {
 			
 			public void onClick(View v)
 			{
-				mMaster.sendCarCommand(Command.LEFT);
+				mMasterController.sendCarCommand(Command.LEFT);
 			}
 		});
         
@@ -87,7 +81,7 @@ public class MasterButtonActivity extends Activity {
 			
 			public void onClick(View v)
 			{
-				mMaster.sendCarCommand(Command.RIGHT);
+				mMasterController.sendCarCommand(Command.RIGHT);
 			}
 		});
         
@@ -96,7 +90,7 @@ public class MasterButtonActivity extends Activity {
 			
 			public void onClick(View v)
 			{
-				mMaster.sendCarCommand(Command.FORWARDLEFT);
+				mMasterController.sendCarCommand(Command.FORWARDLEFT);
 			}
 		});
         
@@ -105,7 +99,7 @@ public class MasterButtonActivity extends Activity {
 			
 			public void onClick(View v)
 			{
-				mMaster.sendCarCommand(Command.BACKWARDRIGHT);
+				mMasterController.sendCarCommand(Command.BACKWARDRIGHT);
 			}
 		});
         
@@ -114,7 +108,7 @@ public class MasterButtonActivity extends Activity {
 			
 			public void onClick(View v)
 			{
-				mMaster.sendCarCommand(Command.FORWARDRIGHT);
+				mMasterController.sendCarCommand(Command.FORWARDRIGHT);
 			}
 		});
         
@@ -123,7 +117,7 @@ public class MasterButtonActivity extends Activity {
 			
 			public void onClick(View v)
 			{
-				mMaster.sendCarCommand(Command.BACKWARDLEFT);
+				mMasterController.sendCarCommand(Command.BACKWARDLEFT);
 			}
 		});
         
@@ -132,12 +126,12 @@ public class MasterButtonActivity extends Activity {
 			
 			public void onClick(View v)
 			{
-				mMaster.sendCarCommand(Command.STOP);
+				mMasterController.sendCarCommand(Command.STOP);
 			}
 		});
         
         //Make a new Master object, and start the communication
-        mMaster = new Master(mHandler);
+        mMasterController = new Master();
     }
     
     
@@ -156,7 +150,7 @@ public class MasterButtonActivity extends Activity {
     public void onStart()
     {
     	super.onStart();
-    	mMaster.start();
+    	mMasterController.start();
     }
     
     /**
@@ -165,7 +159,7 @@ public class MasterButtonActivity extends Activity {
     public void onPause()
     {
     	super.onPause();
-    	mMaster.disconnectFromSlave();
+    	mMasterController.disconnectFromSlave();
     }
     
     /**
@@ -174,7 +168,7 @@ public class MasterButtonActivity extends Activity {
     public void onStop()
     {
     	super.onStop();
-    	mMaster.disconnectFromSlave();
+    	mMasterController.disconnectFromSlave();
     }
     
     /**
@@ -183,7 +177,7 @@ public class MasterButtonActivity extends Activity {
     public void onDestroy()
     {
         super.onDestroy();  
-        mMaster.disconnectFromSlave();
+        mMasterController.disconnectFromSlave();
     }
     
     /**
@@ -193,31 +187,4 @@ public class MasterButtonActivity extends Activity {
     {
     	//TO DO
     }
-    
-    //Message handler to be used in conjunction with the Bluetooth Communication Service
-    private final Handler mHandler = new Handler() 
-    {
-        @Override
-        public void handleMessage(Message msg) 
-        {
-            switch (msg.what) 
-            {
-	            case MESSAGE_STATE_CHANGE:
-	                switch (msg.arg1) 
-	                {
-	                	case BluetoothCommunicationService.STATE_CONNECTED: break;
-	                	case BluetoothCommunicationService.STATE_CONNECTING: break;
-	                	case BluetoothCommunicationService.STATE_LISTEN: break;
-	                	case BluetoothCommunicationService.STATE_NONE: break;
-	                }
-	                break;
-	            case MESSAGE_WRITE:
-	                break;
-	            case MESSAGE_READ:
-	                break;
-	            case MESSAGE_DEVICE_NAME:
-	                break;
-            }
-        }
-    };
 }
