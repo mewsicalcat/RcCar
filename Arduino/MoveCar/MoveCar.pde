@@ -1,9 +1,12 @@
+/* Jessie Young, David Widen, Thomas Cheng
+   Johns Hopkins University, Object Oriented Software Engineering 2011
+   Group 2 
+   MoveCar.pde: C++ code to create ADB connection, receive move command, and send output to motor controller 
+*/
 #include <SPI.h>
 #include <Adb.h>
-//#include "Command.h" //placed in Arduino's 'libraries' directory 
 
-// DEFINE PINS (pins = lower case) 
-
+// DEFINE PINS
 const int forward =  2; 
 const int backward = 5; 
 const int left = 6; 
@@ -97,15 +100,8 @@ void adbEventHandler(Connection * connection, adb_eventType event, uint16_t leng
       default: 
         Serial.println("Invalid input...");
         break;  
-    }//end switch
-      
-      
+    }//end switch   
   }
-  
-  
-
-  //move car
-
 }
 
 void setup()
@@ -117,7 +113,6 @@ void setup()
   pinMode(right, OUTPUT);
   setLow(); //
   Serial.println("Setup: all LOW");
-  
 
   // Initialise the ADB subsystem.  
   ADB::init();
