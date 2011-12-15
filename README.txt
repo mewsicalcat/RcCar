@@ -1,9 +1,11 @@
-Updated 12/12/2011
+Updated 12/14/2011
+As of Iteration 6 (final submission) 
+
+The most up-to-date version of the Android project is in the RcCar > Android > RcCarv1.0 directory. The most updated Arduino code is in the Arduino directory's MoveCar.pde sketch. 
 
 Official projects are in RcCarvX.Y.Z files, the ServoControl project, and the ArduinoAndroid42.pde located in the Arduino folder. The rest of the Arduino sketches in the folder serve as tests for various functionalities. 
 
 The most recent files have the highest version numbers.
-Version 0.5.4 is the current stable version for Iteration 6. This includes the code for the working accelerometer control of the RC Car. 
 
 Version 0.5 - 0.5.3.1 are stable versions developed during prototyping phases (Between Iterations 2 and 3)
 Versions 0.0 - 0.2 are stable versions developed during planning phases (Iteration 2)
