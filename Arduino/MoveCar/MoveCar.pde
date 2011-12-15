@@ -44,7 +44,7 @@ void adbEventHandler(Connection * connection, adb_eventType event, uint16_t leng
         Serial.println("FORWARD!");
         setLow(); 
         digitalWrite(forward, HIGH);
-        delay(100);    // Delay the output a little bit to preven
+        delay(100);    // Delay the output a little bit to prevent jitter
         break; 
       case 1: 
         Serial.println("BACKWARD!");

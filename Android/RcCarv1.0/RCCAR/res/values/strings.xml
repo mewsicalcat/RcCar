@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World, MainActivity!</string>
+    <string name="app_name">RCCAR</string>
+    <string name="launchMaster">Button Control</string>
+    <string name="launchSlave">Slave Device</string>
+    <string name="forward">Forward</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
+    <string name="backward">Backward</string>
+    <string name="stop">Stop</string>
+    <string name="sendMessage">Send Message</string>
+    <string name="not_connected">This device is not currently connected to a remote device via Bluetooth</string>
+    <string name="forwardRight">Forward Right</string>
+    <string name="forwardLeft">Forward Left</string>
+    <string name="backwardRight">Backward Right</string>
+    <string name="backwardLeft">Backward Left</string>
+    <string name="launchaccel">Accelerometer Control</string>
+</resources>
